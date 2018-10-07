@@ -139,8 +139,9 @@ class BaseModel(object):
 
                 # Save the result in an image file
                 image_file = batch[l]
-                image_name = image_file.split(os.sep)[-1]
-                image_name = os.path.splitext(image_name)[0]
+                # image_name = image_file.split(os.sep)[-1]
+                # image_name = os.path.splitext(image_name)[0]
+                image_name = os.path.basename(image_file)
                 img = plt.imread(image_file)
                 plt.imshow(img)
                 plt.axis('off')

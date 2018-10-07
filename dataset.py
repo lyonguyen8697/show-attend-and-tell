@@ -5,6 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from utils.coco.coco import COCO
+from utils.flickr.flickr import Flickr
 from utils.vocabulary import Vocabulary
 
 class DataSet(object):
@@ -72,7 +73,8 @@ class DataSet(object):
 
 def prepare_train_data(config):
     """ Prepare the data for training the model. """
-    coco = COCO(config.train_caption_file)
+    # coco = COCO(config.train_caption_file)
+    coco = Flickr(config.train_caption_file)
     coco.filter_by_cap_len(config.max_caption_length)
 
     print("Building the vocabulary...")

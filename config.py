@@ -50,8 +50,10 @@ class Config(object):
         self.vocabulary_size = 5000
 
         # about the training
-        self.train_image_dir = './train/images/'
-        self.train_caption_file = './train/captions_train2014.json'
+        # self.train_image_dir = './train/images/'
+        self.train_image_dir = 'E:/Datasets/Flickr8k/Flicker8k_Dataset/'
+        # self.train_caption_file = './train/captions_train2014.json'
+        self.train_caption_file = './train/Flickr8k.lemma.token.txt'
         self.temp_annotation_file = './train/anns.csv'
         self.temp_data_file = './train/data.npy'
 

@@ -2,6 +2,8 @@
 import numpy as np
 import cv2
 import heapq
+import Augmentor
+
 
 class ImageLoader(object):
     def __init__(self, mean_file):
@@ -10,9 +12,22 @@ class ImageLoader(object):
         self.crop_shape = np.array([224, 224], np.int32)
         self.mean = np.load(mean_file).mean(1).mean(1)
 
-    def load_image(self, image_file):
+        self.maker = Augmentor.Pipeline()
+        self.maker.rotate(0.7, max_left_rotation=10, max_right_rotation=10)
+        self.maker.zoom(0.5, min_factor=1.1, max_factor=1.3)
+        self.maker.flip_left_right(0.5)
+        self.maker.random_distortion(0.5, 5, 5, 5)
+        self.maker.skew(0.5, 0.5)
+
+    def image_distortion(self, image):
+        return self.maker._execute_with_array(image)
+
+    def load_image(self, image_file, distortion=False):
         """ Load and preprocess an image. """
         image = cv2.imread(image_file)
+
+        if distortion:
+            image = self.image_distortion(image)
 
         if self.bgr:
             temp = image.swapaxes(0, 2)
@@ -25,15 +40,17 @@ class ImageLoader(object):
         image = image[offset[0]:offset[0]+self.crop_shape[0],
                       offset[1]:offset[1]+self.crop_shape[1]]
         image = image - self.mean
+
         return image
 
-    def load_images(self, image_files):
+    def load_images(self, image_files, distortion=False):
         """ Load and preprocess a list of images. """
         images = []
         for image_file in image_files:
-            images.append(self.load_image(image_file))
+            images.append(self.load_image(image_file, distortion))
         images = np.array(images, np.float32)
         return images
+
 
 class CaptionData(object):
     def __init__(self, sentence, memory, output, score):
@@ -58,6 +75,7 @@ class CaptionData(object):
     def __eq__(self, other):
         assert isinstance(other, CaptionData)
         return self.score == other.score
+
 
 class TopN(object):
     def __init__(self, n):

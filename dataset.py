@@ -1,12 +1,13 @@
 import os
-import math
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
 from utils.coco.coco import COCO
 from utils.flickr.flickr import Flickr
+from utils.etsy.etsy import Etsy
 from utils.vocabulary import Vocabulary
+
 
 class DataSet(object):
     def __init__(self,
@@ -71,10 +72,12 @@ class DataSet(object):
         """ Determine whether there is a full batch left. """
         return self.current_idx + self.batch_size <= self.count
 
+
 def prepare_train_data(config):
     """ Prepare the data for training the model. """
     # coco = COCO(config.train_caption_file)
-    coco = Flickr(config.train_caption_file)
+    # coco = Flickr(config.train_caption_file)
+    coco = Etsy(config.train_caption_file)
     coco.filter_by_cap_len(config.max_caption_length)
 
     print("Building the vocabulary...")
@@ -141,9 +144,11 @@ def prepare_train_data(config):
     print("Dataset built.")
     return dataset
 
+
 def prepare_eval_data(config):
     """ Prepare the data for evaluating the model. """
-    coco = COCO(config.eval_caption_file)
+    # coco = Flickr(config.eval_caption_file)
+    coco = Etsy(config.eval_caption_file)
     image_ids = list(coco.imgs.keys())
     image_files = [os.path.join(config.eval_image_dir,
                                 coco.imgs[image_id]['file_name'])
@@ -162,6 +167,7 @@ def prepare_eval_data(config):
     dataset = DataSet(image_ids, image_files, config.batch_size)
     print("Dataset built.")
     return coco, dataset, vocabulary
+
 
 def prepare_test_data(config):
     """ Prepare the data for testing the model. """
@@ -183,6 +189,7 @@ def prepare_test_data(config):
     dataset = DataSet(image_ids, image_files, config.batch_size)
     print("Dataset built.")
     return dataset, vocabulary
+
 
 def build_vocabulary(config):
     """ Build the vocabulary from the training data and save it to a file. """

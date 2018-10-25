@@ -47,22 +47,21 @@ class Config(object):
 
         # about the vocabulary
         self.vocabulary_file = './vocabulary.csv'
-        self.vocabulary_size = 5000
+        self.vocabulary_size = 1200
+        self.mean_file = './utils/ilsvrc_2012_mean.npy'
 
         # about the training
-        # self.train_image_dir = './train/images/'
-        self.train_image_dir = 'E:/Datasets/Flickr8k/Flicker8k_Dataset/'
-        # self.train_caption_file = './train/captions_train2014.json'
-        self.train_caption_file = './train/Flickr8k.lemma.token.txt'
+        self.train_image_dir = 'E:\Datasets\etsy\etsy_filter'
+        self.train_caption_file = './train/etsy_train.json'
         self.temp_annotation_file = './train/anns.csv'
         self.temp_data_file = './train/data.npy'
 
         # about the evaluation
-        self.eval_image_dir = './val/images/'
-        self.eval_caption_file = './val/captions_val2014.json'
+        self.eval_image_dir = 'E:\Datasets\etsy\etsy_filter'
+        self.eval_caption_file = './train/etsy_test.json'
         self.eval_result_dir = './val/results/'
         self.eval_result_file = './val/results.json'
-        self.save_eval_result_as_image = False
+        self.save_eval_result_as_image = True
 
         # about the testing
         self.test_image_dir = './test/images/'
